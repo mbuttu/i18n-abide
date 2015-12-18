@@ -23,6 +23,9 @@ var argv = require('optimist').demand(['l'])
    .alias('f', 'template-file-ext')
    .default('f', 'ejs')
    .describe('template-file-ext', 'File extension of templates. Defaults to ejs as in home.ejs, value can be valid file ext.')
+   .alias('o', 'output')
+   .default('o', 'messages.pot')
+   .describe('output-file', 'Specify file where extracted string will be written to.')
    .check(function (argv) {
     // We have atleast one directory of source code to process
     return argv._.length >= 1;
@@ -43,11 +46,11 @@ process.chdir(path.dirname(__dirname));
 var jsxGettextPath = path.join(__dirname, '../node_modules/.bin/jsxgettext');
 
 var jsCmd = jsxGettextPath + ' %s --keyword=_ -l JavaScript ' +
-'--output-dir=%s/templates/LC_MESSAGES --from-code=utf-8 --output=messages.pot ' +
+'--output-dir=%s/templates/LC_MESSAGES --output=' + argv.output + ' ' +
 '`find %s -name \'*.js\' | grep -v node_modules | grep -v "\\.git"';
 
 var templateCmd = jsxGettextPath + ' %s --keyword=_ -L ' + argv['template-engine'] +
-' --output-dir=%s/templates/LC_MESSAGES --from-code=utf-8 --output=messages.pot ' +
+' --output-dir=%s/templates/LC_MESSAGES --output=' + argv.output + ' ' +
 '`find %s -name \'*.%s\' | grep -v node_modules | grep -v "\\.git"';
 
 if (argv.exclude) {
@@ -61,7 +64,7 @@ if (argv.exclude) {
   });
 }
 
-templateExt = argv['template-file-ext'];
+var templateExt = argv['template-file-ext'];
 // Close out `find ...` backtick
 jsCmd += '`';
 templateCmd += '`';
