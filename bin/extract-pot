@@ -45,7 +45,7 @@ process.chdir(path.dirname(__dirname));
 
 var jsxGettextPath = path.join(__dirname, '../node_modules/.bin/jsxgettext');
 
-var jsCmd = jsxGettextPath + ' %s --keyword=_ -l JavaScript ' +
+var jsCmd = jsxGettextPath + ' %s --keyword=_ -L ' + argv['template-engine'] + ' ' +
 '--output-dir=%s/templates/LC_MESSAGES --output=' + argv.output + ' ' +
 '`find %s -name \'*.js\' | grep -v node_modules | grep -v "\\.git"';
 
